@@ -7,7 +7,6 @@ let sortDirection; //true = sort down, false = sort up
 function init() {
   const adj = getAdjectives();
   adjectives = JSON.parse(adj);
-  console.log(adjectives);
   render();
 }
 
@@ -19,7 +18,6 @@ function addSortEvents() {
     sortDirection = false; //for sort up
     sort();
     render();
-    console.log("true");
   });
 
   document.getElementById("sort-down").addEventListener("click", function () {
@@ -29,15 +27,13 @@ function addSortEvents() {
     sortDirection = true; //for sort down
     sort();
     render();
-    console.log("false");
   });
 }
 
 function addVoteEvents() {
   //TODO
   const upDoots = document.querySelectorAll(".upvote-button");
-  upDoots.forEach((upDoot) => {
-    console.log("up");
+  upDoots.forEach(function (upDoot) {
     upDoot.addEventListener("click", function () {
       upVote(this.value);
     });
@@ -45,8 +41,6 @@ function addVoteEvents() {
 
   const downDoots = document.querySelectorAll(".downvote-button");
   downDoots.forEach(function (downDoot) {
-    console.log("up");
-
     downDoot.addEventListener("click", function () {
       downVote(this.value);
     });
@@ -100,39 +94,39 @@ function render() {
 
     let html = `<div class="word-item">
     <span class="word-score ${stat}">${word.score}</span>`;
-    html += `<span>${word.word}</span>`;
-    html += `<div class="vote-buttons">
-        <button value="${word.value}" class="upvote-button">👍</button>
-        <button value="${word.value}" class="downvote-button">👎</button>
+    html += `<span>${word.word}</span>
+    <div class="vote-buttons">
+    <button value="${word.value}" class="upvote-button">👍</button>
+    <button value="${word.value}" class="downvote-button">👎</button>
     </div>`;
     document.querySelector(".word-list").innerHTML += html;
   });
 
   addSortEvents();
+  addVoteEvents();
 }
 
 function upVote(target) {
   // TODO
   updateScore(target, 1);
-  console.log("up");
 }
 
 function downVote(target) {
   // TODO
   updateScore(target, -1);
-  console.log("down");
 }
 
 function updateScore(word, scoreChange) {
   const foundIndex = adjectives.findIndex(function (item, index) {
     if (item.word == word) {
-      return true;
+      // index
     }
   });
 
-  if (foundIndex != null) {
+  if (foundIndex != -1) {
     let newScore = adjectives[foundIndex]["score"] + scoreChange;
     adjectives[foundIndex]["score"] = Math.round(newScore * 100) / 100;
   }
+  render();
 }
 init();
