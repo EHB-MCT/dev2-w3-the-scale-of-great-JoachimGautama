@@ -31,18 +31,17 @@ function addSortEvents() {
 }
 
 function addVoteEvents() {
-  //TODO
   const upDoots = document.querySelectorAll(".upvote-button");
   upDoots.forEach(function (upDoot) {
     upDoot.addEventListener("click", function () {
-      upVote(this.value);
+      upVote(upDoot.value);
     });
   });
 
   const downDoots = document.querySelectorAll(".downvote-button");
   downDoots.forEach(function (downDoot) {
     downDoot.addEventListener("click", function () {
-      downVote(this.value);
+      downVote(downDoot.value);
     });
   });
 }
@@ -96,30 +95,27 @@ function render() {
     <span class="word-score ${stat}">${word.score}</span>`;
     html += `<span>${word.word}</span>
     <div class="vote-buttons">
-    <button value="${word.value}" class="upvote-button">👍</button>
-    <button value="${word.value}" class="downvote-button">👎</button>
+    <button value="${word.word}" class="upvote-button">👍</button>
+    <button value="${word.word}" class="downvote-button">👎</button>
     </div>`;
     document.querySelector(".word-list").innerHTML += html;
   });
-
-  addSortEvents();
   addVoteEvents();
+  addSortEvents();
 }
 
 function upVote(target) {
-  // TODO
-  updateScore(target, 1);
+  updateScore(target, 0.1);
 }
 
 function downVote(target) {
-  // TODO
-  updateScore(target, -1);
+  updateScore(target, -0.1);
 }
 
 function updateScore(word, scoreChange) {
   const foundIndex = adjectives.findIndex(function (item, index) {
     if (item.word == word) {
-      // index
+      return true;
     }
   });
 
