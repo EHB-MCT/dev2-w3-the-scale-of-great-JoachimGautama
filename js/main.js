@@ -1,14 +1,21 @@
-import { getAdjectives } from "./data.js";
-
+const URL = "https://dev2-prima.onrender.com/adjectives";
 let adjectives;
 let sorted = false;
 let sortDirection; //true = sort down, false = sort up
 
-function init() {
-  const adj = getAdjectives();
-  adjectives = JSON.parse(adj);
-  render();
+async function init() {
+  fetch(URL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (result) {
+      adjectives = result;
+      sort();
+      render();
+    });
 }
+
+// window.setInterval(init(), 10000);
 
 function addSortEvents() {
   document.getElementById("sort-up").addEventListener("click", function () {
@@ -52,13 +59,15 @@ function sort() {
     mod = -1;
   }
 
-  adjectives.sort(function (a, b) {
-    if (a.score >= b.score) {
-      return 1 * mod;
-    } else {
-      return -1 * mod;
-    }
-  });
+  if (sorted) {
+    adjectives.sort(function (a, b) {
+      if (a.score >= b.score) {
+        return 1 * mod;
+      } else {
+        return -1 * mod;
+      }
+    });
+  }
 }
 
 function render() {
@@ -105,24 +114,26 @@ function render() {
 }
 
 function upVote(target) {
-  updateScore(target, 0.1);
+  fetch(`https://dev2-prima.onrender.com/upvote/${target}`);
+  init();
 }
 
 function downVote(target) {
-  updateScore(target, -0.1);
+  fetch(`https://dev2-prima.onrender.com/downvote/${target}`);
+  init();
 }
 
-function updateScore(word, scoreChange) {
-  const foundIndex = adjectives.findIndex(function (item, index) {
-    if (item.word == word) {
-      return true;
-    }
-  });
+// function updateScore(word, scoreChange) {
+//   const foundIndex = adjectives.findIndex(function (item, index) {
+//     if (item.word == word) {
+//       return true;
+//     }
+//   });
 
-  if (foundIndex != -1) {
-    let newScore = adjectives[foundIndex]["score"] + scoreChange;
-    adjectives[foundIndex]["score"] = Math.round(newScore * 100) / 100;
-  }
-  render();
-}
+//   if (foundIndex != -1) {
+//     let newScore = adjectives[foundIndex]["score"] + scoreChange;
+//     adjectives[foundIndex]["score"] = Math.round(newScore * 100) / 100;
+//   }
+// render();
+// }
 init();
