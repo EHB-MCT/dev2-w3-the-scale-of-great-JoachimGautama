@@ -3,7 +3,7 @@ let adjectives;
 let sorted = false;
 let sortDirection; //true = sort down, false = sort up
 
-async function init() {
+function init() {
   fetch(URL)
     .then(function (response) {
       return response.json();
@@ -15,7 +15,7 @@ async function init() {
     });
 }
 
-// window.setInterval(init(), 10000);
+setInterval(init(), 1000);
 
 function addSortEvents() {
   document.getElementById("sort-up").addEventListener("click", function () {
